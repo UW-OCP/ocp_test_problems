@@ -1,0 +1,20 @@
+# Bryson, A. E. and Ho, Y., Applied Optimal Control, Hemisphere, 1975.
+
+Constants               = [pi = 3.14159265358979, V = 1.0, h = 1.0];
+StateVariables          = [x1, x2];
+ControlVariables        = [u1];
+InitialConstraints      = [x1-3.66, x2+1.86];
+TerminalConstraints     = [x1, x2];
+
+CostFunctional          = 0.5*u1*u1;
+
+DifferentialEquations   = [V*cos(u1)-V*x2/h, V*sin(u1)];
+
+FinalTime               = 10.0;
+
+StateEstimate           = [3.66-3.66*t/10.0, -1.86+1.86*t/10.0];
+ControlEstimate         = [1-0.9*t/10.0];
+
+Nodes                   = 101;
+Tolerance               = 1.0e-6;
+OutputFile              = "ex9.data";

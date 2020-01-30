@@ -1,0 +1,159 @@
+
+# This is test problem dock01 (example 24.1) from John T. Betts, A collection of optimal control test problems, November 17, 2015
+
+Constants = [
+	tf = 200,
+	a = 7071000.0,
+	mu = 398e12,
+	m = 100,
+	a_max = 0.1,
+	t_max = 1,
+	J11 = 1000,
+	K11 = 1000,
+	J22 = 2000,
+	K22 = 2000,
+	J33 = 1000,
+	K33 = 1000,
+	a1 = 0, a2 = 1.01, a3 = 0,
+	b1 = 0, b2 = 1.01, b3 = 0,
+	s0 = 0,
+	s1 = 1,
+	s2 = 1,
+	p1_0 = -0.05,
+	f2_0 = 0.0349,
+	f3_0 = 0.017453,
+	y_0 = -10
+];
+
+Variables = [
+	p4_0,
+	n, 
+	Q11, Q12, Q13,
+	Q21, Q22, Q23,
+	Q31, Q32, Q33,
+	T11, T12, T13,
+	T21, T22, T23,
+	T31, T32, T33,
+	S11, S12, S13,
+	S21, S22, S23,
+	S31, S32, S33,
+	Sax, Say, Saz,
+	Tbx, Tby, Tbz,
+	Swx, Swy, Swz,
+	Tfx, Tfy, Tfz
+];
+
+p4_0 = sqrt(1-0.05*0.05);
+
+n = sqrt(mu/(a*a*a));
+
+StateVariables = [x, y, z, vx, vy, vz, q1, q2, q3, q4, w1, w2, w3, p1, p2, p3, p4, f1, f2, f3];
+
+ControlVariables = [ax, ay, az, tau1, tau2, tau3];
+
+#ParameterVariables = [tf];
+#ParameterEstimate = [420];
+
+DifferentialEquations = [
+	tf*vx,
+	tf*vy,
+	tf*vz,
+	tf*(2*n*vy + 3*n*n*x + ax/m),
+	tf*(-2*n*vx + ay/m),
+	tf*(-n*n*z + az/m),
+	tf*(w3*q2 - w2*q3 + w1*q4)/2,
+	tf*(-w3*q1 + w1*q3 + w2*q4)/2,
+	tf*(w2*q1 - w1*q2 + w3*q4)/2,
+	tf*(-w1*q1 - w2*q2 - w3*q3)/2,
+	tf*(w2*w3*(J22-J33) + tau1)/J11,
+	tf*(w1*w3*(J33-J11) + tau2)/J22,
+	tf*(w1*w2*(J11-J22) + tau3)/J33,
+	tf*(f3*p2 - f2*p3 + f1*p4)/2,
+	tf*(-f3*p1 + f1*p3 + f2*p4)/2,
+	tf*(f2*p1 - f1*p2 + f3*p4)/2,
+	tf*(-f1*p1 - f2*p2 - f3*p3)/2,
+	tf*(f2*f3*(K22-K33))/K11,
+	tf*(f1*f3*(K33-K11))/K22,
+	tf*(f1*f2*(K11-K22))/K33
+];
+
+InitialConstraints = [x, y - y_0, z, vx, vy, vz, q1, q2, q3, q4 - 1, w1, w2, w3, p1 - p1_0, p2, p3, p4 - p4_0, f1, f2 - f2_0, f3 - f3_0];
+
+Q11 = q1*q1 + q4*q4 - q2*q2 - q3*q3;
+Q12 = 2*(q1*q2 + q4*q3);
+Q13 = 2*(q1*q3 - q4*q2);
+Q21 = 2*(q1*q2 - q4*q3);
+Q22 = q2*q2 + q4*q4 - q1*q1 - q3*q3;
+Q23 = 2*(q2*q3 + q4*q1);
+Q31 = 2*(q1*q3 + q4*q2);
+Q32 = 2*(q2*q3 - q4*q1);
+Q33 = q3*q3 + q4*q4 - q1*q1 - q2*q2;
+
+S11 = Q11;
+S12 = Q21;
+S13 = Q31;
+S21 = Q12;
+S22 = Q22;
+S23 = Q32;
+S31 = Q13;
+S32 = Q23;
+S33 = Q33;
+
+T11 = p1*p1 + p4*p4 - p2*p2 - p3*p3;
+T12 = 2*(p1*p2 - p4*p3);
+T13 = 2*(p1*p3 + p4*p2);
+T21 = 2*(p1*p2 + p4*p3);
+T22 = p2*p2 + p4*p4 - p1*p1 - p3*p3;
+T23 = 2*(p2*p3 - p4*p1);
+T31 = 2*(p1*p3 - p4*p2);
+T32 = 2*(p2*p3 + p4*p1);
+T33 = p3*p3 + p4*p4 - p1*p1 - p2*p2;
+
+Sax = S11*a1 + S12*a2 + S13*a3;
+Say = S21*a1 + S22*a2 + S23*a3;
+Saz = S31*a1 + S32*a2 + S33*a3;
+
+Tbx = T11*b1 + T12*b2 + T13*b3;
+Tby = T21*b1 + T22*b2 + T23*b3;
+Tbz = T31*b1 + T32*b2 + T33*b3;
+
+Swx = S11*w1 + S12*w2 + S13*w3;
+Swy = S21*w1 + S22*w2 + S23*w3;
+Swz = S31*w1 + S32*w2 + S33*w3;
+
+Tfx = T11*f1 + T12*f2 + T13*f3;
+Tfy = T21*f1 + T22*f2 + T23*f3;
+Tfz = T31*f1 + T32*f2 + T33*f3;
+
+# x + S*a - T*b
+# v + S*w % S*a - T*f % T*b
+TerminalConstraints = [vx + Swy*Saz - Swz*Say + Tfz*Tby - Tfy*Tbz,	vy + Swz*Sax - Swx*Saz + Tfx*Tbz - Tfz*Tbx,	vz + Swx*Say - Swy*Sax + Tfy*Tbx - Tfx*Tby,x + Sax - Tbx,	y + Say - Tby,z + Saz - Tbz];
+
+#TerminalPenalty = x*x + y*y + z*z + vx*vx + vy*vy + vz*vz + w1*w1 + w2*w2 + w3*w3 + f1*f1 + f2*f2 + f3*f3;
+
+#CostFunctional = tf*(s1*(ax*ax + ay*ay + az*az) + s2*(tau1*tau1 + tau2*tau2 + tau3*tau3)) + tf*(x*x + y*y + z*z + vx*vx + vy*vy + vz*vz + w1*w1 + w2*w2 + w3*w3 + f1*f1 + f2*f2 + f3*f3);
+CostFunctional = tf*(s1*(ax*ax + ay*ay + az*az) + s2*(tau1*tau1 + tau2*tau2 + tau3*tau3));
+
+FinalTime = 1;
+
+InequalityConstraints = [Q11*ax + Q12*ay + Q13*az - a_max,	Q21*ax + Q22*ay + Q23*az - a_max,	Q31*ax + Q32*ay + Q33*az - a_max,	-Q11*ax - Q12*ay - Q13*az - a_max,	-Q21*ax - Q22*ay - Q23*az - a_max,	-Q31*ax - Q32*ay - Q33*az - a_max,		-t_max - tau1, 	tau1 - t_max,	-t_max - tau2, tau2 - t_max,-t_max - tau3, tau3 - t_max];
+
+StateEstimate = [
+	0, y_0, 0,
+	0, 0, 0,
+	0, 0, 0, 1,
+	0, 0, 0,
+	p1_0, 0, 0, p4_0,
+	0, f2_0, f3_0
+];
+
+ControlEstimate = [0, 0, 0, 0, 0, 0];
+
+Nodes = 201;
+Tolerance = 1.0e-6;
+#InputFile = "exdock01_uncon0.data"; # with terminalpenalty sans TerminalConstraints, InequalityConstraints
+#InputFile = "exdock01_uncon1.data"; # with TerminalConstraints sans TerminalPenalty, InequalityConstraints
+#InputFile = "exdock01_uncon2.data"; # with TerminalConstraints, InequalityConstraints sans TerminalPenalty
+OutputFile = "exdock01_uncon0.data"; 
+
+Display = YES;

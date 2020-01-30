@@ -1,0 +1,46 @@
+# This is test problem ffrb01 (example 25.1) from John T. Betts, A collection of optimal control test problems, November 17, 2015
+
+Variables = [_epsilon_];
+
+Constants = [tf = 12, alpha = 0.2, beta = 0.2, pi = 3.141592654, eps = 1.0e-8, fac = 0.01];
+
+StateVariables = [y1, y2, y3, y4, y5, y6];
+
+ControlVariables = [u1, u2, u3, u4];
+
+InitialConstraints = [y1 + 10, y2 + 10, y3 - pi/2, y4, y5, y6];
+
+TerminalConstraints = [y1, y2, y3, y4, y5, y6];
+
+DifferentialEquations = [
+	tf*y4, 
+	tf*y5,
+	tf*y6, 
+	tf*(u1 - u2 + u3 - u4)*cos(y3), 
+	tf*(u1 - u2 + u3 - u4)*sin(y3), 
+	tf*(alpha*(u1 - u2) - beta*(u3 - u4))
+];
+
+InequalityConstraints = [u1 + u2 - 1, u3 + u4 - 1, -u1, -u2, -u3, -u4, u1 - 1, u2 - 1, u3 - 1, u4 - 1];
+
+# approximate abs(u) with sqrt(u*u + epsilon)
+CostFunctional = (1-fac)*tf*(sqrt(u1*u1 + eps) + sqrt(u2*u2 + eps) + sqrt(u3*u3 + eps) + sqrt(u4*u4 + eps)) +
+				fac*tf*(u1*u1 + u2*u2 + u3*u3 + u4*u4);
+
+Tolerance = 1.0e-6;
+Display = YES;
+# fac = 0.9
+# InputFile = "exffrb01a.data";
+# OutputFile = "exffrb01b.data";
+# fac = 0.7
+# InputFile = "exffrb01b.data";
+# OutputFile = "exffrb01c.data";
+# fac = 0.5
+# InputFile = "exffrb01c.data";
+# OutputFile = "exffrb01d.data";
+# fac = 0.3
+# InputFile = "exffrb01d.data";
+# OutputFile = "exffrb01e.data";
+# fac = 0.01
+InputFile = "exffrb01e.data";
+OutputFile = "exffrb01f.data";

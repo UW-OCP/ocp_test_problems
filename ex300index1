@@ -1,0 +1,14 @@
+# mass-spring-damper system
+# index 1 DAE model
+Constants               = [m = 3.0, k = 10.0, b = 0.1];
+StateVariables 			= [s, v];
+ControlVariables 		= [a, e];
+InitialConstraints 		= [s - 1.0, v];
+TerminalConstraints 	= [s, v];
+CostFunctional 			= e*e*0.5;
+DifferentialEquations 	= [v, a];
+EqualityConstraints     = [m*a + b*v + k*s - e];
+Nodes					= 101;
+Tolerance				= 1.0e-6;
+OutputFile				= "ex300index1.data";
+Display					= YES;

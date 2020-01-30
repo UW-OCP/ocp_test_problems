@@ -1,0 +1,46 @@
+#Constants               = [alpha = 1.0e-2, beta = 1.0e6];
+Constants               = [beta = 1.0e8];
+#Variables               = [_epsilon_];
+StateVariables          = [x1, x2, x3, x4];
+ControlVariables        = [u, v];
+#ControlVariables        = [u];
+InitialConstraints      = [x1, x2, x3, x4];    
+TerminalConstraints     = [x1 - 1, x2, x3, x4];
+#TerminalConstraints     = [x1 - 1];
+#TerminalPenalty         = (x1-1)*(x1-1) + x2*x2 + x3*x3 + x4*x4;
+#CostFunctional          = 0.5*(x1*x1 + x2*x2 + x3*x3 + x4*x4 + u*u + v*v);
+CostFunctional          = 0.5*(x1*x1 + x2*x2 + x3*x3 + x4*x4 + u*u + beta*v*v);
+#CostFunctional          = 0.5*(x1*x1 + x2*x2 + x3*x3 + x4*x4 + u*u + v*v/_epsilon_);
+#CostFunctional          = 0.5*(x1*x1 + x2*x2 + x3*x3 + x4*x4 + u*u);
+DifferentialEquations   = [x2, u, x4, u - x3];
+
+MaximumMeshRefinements  = 20;
+MaximumNodes            = 2000;
+MaximumNewtonIterations = 1000;
+Display                 = NO;
+Tolerance               = 1.0e-6;
+Nodes                   = 1001;
+#
+# _epsilon_ = 1 -> x1 <= 10
+# _epsilon_ = 0 -> x1 <= 5
+# x1 <= _epsilon_*10 + (1 - _epsilon_)*5
+#
+#
+#StateVariableInequalityConstraints = [x1 - (_epsilon_*10 + (1 - _epsilon_)*5)];
+#StateVariableInequalityConstraints = [x1 - (_epsilon_*10 + (1 - _epsilon_)*5) + v];
+#StateVariableInequalityConstraints = [x1 - (v*10 + (1 - v)*5)];
+#StateVariableInequalityConstraints = [x1 - 5 + v];
+#StateVariableInequalityConstraints = [x1 - 5 + _epsilon_*v];
+#StateVariableInequalityConstraints = [x1 - 5 + v + _epsilon_*u*_epsilon_*u];
+#StateVariableInequalityConstraints = [x1 - 5 + v - alpha*_epsilon_*u*_epsilon_*u];
+#StateVariableInequalityConstraints = [x1 - 5 + _epsilon_*u*_epsilon_*u];
+#InequalityConstraints              = [v - _epsilon_, -_epsilon_ - v];
+#InequalityConstraints              = [-v];
+InequalityConstraints              = [-v, x1 - 5 + v];
+#InequalityConstraints              = [-v, x1 - 50 + v]; # to get -> exKim1v_a.data; 10 -> b; 8 -> c; 7 -> d;
+#InequalityConstraints              = [v - alpha, -alpha - v];
+#InputFile               = "exKim0v.data";
+#InputFile              = "exKim1v_c.data";
+StateEstimate           = [t, t*(1-t), t*(1-t), t*(1-t)];
+ControlEstimate         = [10.0-20.0*t, 0];
+OutputFile              = "exKim1v.data";

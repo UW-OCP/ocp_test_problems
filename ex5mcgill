@@ -1,0 +1,36 @@
+# Shimizu, K. and Ito, S.,
+# Constrained optimization in Hilbert space and a generalized dual quasi-newton
+# algorithm for state-constrained optimal control problems,
+# IEEE Trans. AC, Vol. 39, pp. 982--986, 1994.
+
+Variables = [nu1, m1];
+StateVariables           = [x1, x2, x3];
+ControlVariables         = [u];
+
+InitialTime              = 0.0;
+FinalTime                = 5.0;
+
+InitialConstraints       = [x1 - 1.0, x2, x3];
+#TerminalConstraints = [x3-1.0e-3];
+TerminalPenalty = x3*x3/1.0e-6;
+
+CostFunctional           = 0.5*(x1*x1 + x2*x2 + u*u);
+nu1 = -(x2+0.25);
+m1 = nu1 + sqrt(nu1*nu1+1.0e-12);
+
+DifferentialEquations    = [x2,
+                          -x1 + (1.0-x1*x1)*x2 + u, m1*m1];
+                          
+#StateVariableInequalityConstraints    = [-(x2+0.25)];
+
+StateEstimate            = [1*1, -0.25, 1];
+ControlEstimate          = [1];
+
+Nodes                    = 101;
+Tolerance                = 1.0e-6;
+InputFile               = "ex5.data";
+OutputFile               = "ex5.data";
+Display                  = NO;
+MaximumMeshRefinements   = 20;
+MaximumNodes             = 2000;
+

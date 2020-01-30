@@ -1,0 +1,36 @@
+# H. Maurer: Numerical solution of singular control problems using multiple shooting techniques
+# Journal Optimization Theory and Applications, Vol. 18, pp. 235--257
+# Example 7.2
+Variables               = [D, g];
+Constants               = [g0 = 9.81, r0 = 6.371e6, Fmax = 9.52551,
+                            c = 2060, alpha = 0.01227, beta = 0.145e-3,
+                            m0  = 67.9833, mf = 214.839,
+                            tau = 10];
+StateVariables          = [h, v, m];
+ControlVariables        = [F];
+#ParameterVariables     = [tau];
+InitialConstraints      = [h, v-2, m - m0];           
+#TerminalConstraints    = [m - mf];
+#TerminalPenalty        = -h;
+TerminalPenalty         = tau*((h-150)*(h-150) + (m-mf)*(m-mf));
+CostFunctional          = tau*(F*F + v*v + m*m + h*h);
+#CostFunctional          = (F*F + v*v + m*m);
+
+D = alpha*v*v*exp(-beta*h);
+#D = 0;
+g = g0;
+
+DifferentialEquations    = [tau*v, (tau/m)*(F*c - D) - tau*g, -tau*F];
+# InequalityConstraints   = [F-Fmax, -F];
+
+StateEstimate            = [150*t, 2, m0];
+ControlEstimate          = [0];
+#ParameterEstimate       = [1];
+InitialTime              = 0;
+FinalTime                = 1;
+Nodes                    = 1001;
+Tolerance                = 1.0e-6;
+OutputFile               = "ex110.data";
+Display                  = YES;
+MaximumNewtonIterations  = 1000;
+MaximumNodes             = 1000;

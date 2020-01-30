@@ -1,0 +1,55 @@
+
+
+Constants = [mu = 0.1407654e17, rho0 = 0.002378, Re = 20902900, hr = 23800, S = 2690, 
+    m = 6309.44, a0 = -0.20704, a1 = 0.029244,
+    b0 = 0.07854, b1 = -0.61592e-2, b2 = 0.621408e-3, 
+    c0 = 1.06723181, pi = 3.141592654,
+    tf = 1000, fac = 1.0];
+
+Variables = [g, rho, L, D, cL, cD, alpha_hat];
+
+StateVariables = [h, v, gamma, theta, psi, phi];
+
+ControlVariables = [alpha, beta];
+
+# ParameterVariables = [tf];
+
+InitialConstraints = [h - 260000, v - 25600, gamma + pi/180, theta, psi - pi/2, phi];
+TerminalConstraints = [h - 80000, v - 2500, gamma + 5*pi/180];
+TerminalPenalty = -theta;
+# TerminalPenalty = fac*((h-80000)*(h-80000) + (v-2500)*(v-2500) + (gamma + 5*pi/180)*(gamma + 5*pi/180));
+
+g = mu/((Re+h)*(Re+h));
+rho = rho0*exp(-h/hr);
+alpha_hat = 180*alpha/pi;
+cL = a0 + a1*alpha_hat;
+cD = b0 + b1*alpha_hat + b2*alpha_hat*alpha_hat;
+L = cL*S*rho*v*v/2;
+D = cD*S*rho*v*v/2;
+
+DifferentialEquations = [
+    tf*v*sin(gamma),
+    tf*(-D/m -g*sin(gamma)),
+    tf*(L*cos(beta)/(m*v) + cos(gamma)*(v/(Re+h) - g/v)),
+    tf*(v*cos(gamma)*cos(psi)/(Re+h)),
+    tf*(L*sin(beta)/(m*v*cos(gamma)) + v*cos(gamma)*sin(psi)*sin(theta)/(Re+h)),
+    tf*((v/(Re+h))*cos(gamma)*sin(psi)/cos(theta))
+];
+
+# CostFunctional = tf*(alpha*alpha + beta*beta);
+
+InitialTime = 0.0;
+FinalTime = 1.0;
+
+Nodes = 1001;
+Tolerance = 1.0e-6;
+StateEstimate = [260000, 25600, -pi/180, 0, pi/2, 0];  
+#ControlEstimate = [15*pi/180, -75*pi/180];
+ControlEstimate = [20*pi/180, 0];
+
+# ParameterEstimate = [1100];
+OutputFile = "ex108.data"; # tf = 1000
+# InputFile = "_ocp.data";
+# OutputFile = "ex108b.data";
+
+Display = YES;

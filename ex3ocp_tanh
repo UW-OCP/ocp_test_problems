@@ -1,0 +1,65 @@
+# Agrawal, S. K. and Fabien, B. C., Optimization of Dynamic Systems,
+# Kluwer Academic Publishers, 1999. pp. 106
+
+StateVariables          = [x1, x2];
+ControlVariables        = [u];
+ParameterVariables      = [p];
+
+InitialConstraints      = [x1, x2];
+TerminalConstraints     = [x1 - 0.25, x2];
+
+#Constants              = [rho = 1.0e-1];
+#CostFunctional         = p*(1 + 0.5*rho*u*u);
+
+CostFunctional          = p;
+
+DifferentialEquations   = [p*x2, p*u];
+
+InequalityConstraints   = [u - 1.0, -1.0 - u];
+
+StateEstimate           = [0.25*t, sin(0.5*t*3.14159)];
+ControlEstimate         = [1 - 2*t];
+ParameterEstimate       = [2];
+
+Nodes                   = 101;
+Tolerance               = 1.0e-6;
+OutputFile              = "ex3.data";
+Display                 = NO;
+MaximumMeshRefinements  = 20;
+MaximumNodes            = 500;
+#>> epsilon: 8.4249833334846e-09
+#method: lobatto(5)
+#mesh: 1, nodes: 75
+#res: |h|: 2.805765e-10, |g|: 6.889463e-09, |r|: 7.096608e-33
+#steps: 74, iterations: 420
+
+#>> epsilon: 8.4249833334846e-09
+#method: gauss(5)
+#mesh: 1, nodes: 67
+#res: |h|: 2.188568e-10, |g|: 8.139445e-09, |r|: 1.976900e-28
+#remove count: 0
+#add count: 1
+#mesh: 2, nodes: 68
+#res: |h|: 2.226438e-10, |g|: 7.444004e-09, |r|: 5.855755e-27
+#steps: 74, iterations: 482
+
+#>> epsilon: 8.4249833334846e-09
+#method: radau(5)
+#mesh: 1, nodes: 70
+#res: |h|: 9.559168e-10, |g|: 7.861126e-09, |r|: 1.160682e-28
+#remove count: 0
+#add count: 1
+#mesh: 2, nodes: 71
+#res: |h|: 3.006067e-10, |g|: 7.162101e-09, |r|: 1.454690e-26
+#steps: 74, iterations: 523
+
+#>> epsilon: 8.4249833334846e-09
+#method: newton_cotes(5)
+#mesh: 1, nodes: 61
+#res: |h|: 8.902269e-10, |g|: 1.489743e-08, |r|: 5.137507e-30
+#remove count: 0
+#add count: 2
+#mesh: 2, nodes: 63
+#res: |h|: 1.324811e-10, |g|: 7.291431e-09, |r|: 1.517561e-29
+#steps: 74, iterations: 451
+

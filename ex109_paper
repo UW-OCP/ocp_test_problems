@@ -1,0 +1,49 @@
+# Graichen and Petit
+
+Constants               = [pi = 3.14159265358979, m = 2.2, r = 0.2, J = 0.05, mg = 4];
+StateVariables          = [x1, x1_dot, x2, x2_dot, alpha, alpha_dot];
+ControlVariables        = [u1, u2];
+ParameterVariables      = [Tf];
+InitialConstraints      = [x1, x1_dot, x2, x2_dot, alpha, alpha_dot];
+TerminalConstraints     = [x1-1, x1_dot, x2, x2_dot, alpha, alpha_dot];
+
+DifferentialEquations   = [Tf*x1_dot,
+                            Tf*(u1*cos(alpha) - u2*sin(alpha))/m,
+                            Tf*x2_dot,
+                            Tf*(-mg + u1*sin(alpha) + u2*cos(alpha))/m,
+                            Tf*alpha_dot,
+                            Tf*(r*u1)/J];
+
+InequalityConstraints   = [-1*(u1 - 5)*(-5 - u1), -1*(u2 - 17)*(-u2)];
+
+InitialTime             = 0;
+FinalTime               = 1;
+Nodes                   = 201;
+Tolerance               = 1.0e-6;
+
+Display                 = NO;
+MaximumNewtonIterations = 1000;
+MaximumNodes            = 2500;
+MaximumMeshRefinements  = 20;
+
+# start ex109a.data
+#StateEstimate           = [t, t*(1-t), t*(t-1), t*(1-t), 0.01*t*(1-t), t*(1-t)];
+#ControlEstimate         = [0.1, 0.1];
+#ParameterEstimate       = [5];
+#CostFunctional          = Tf*(1.0e2 + 2*u1*u1 + u2*u2);
+#OutputFile              = "ex109a.data";
+# end ex109a.data
+
+# start ex109b.data
+#InputFile               = "ex109a.data";
+#StateVariableInequalityConstraints = [-1*(-30*pi/180.0 - alpha)*(alpha - 30.0*pi/180.0)];
+#CostFunctional          = Tf*(1.0e2 + 2*u1*u1 + u2*u2);
+#OutputFile              = "ex109b.data";
+# end ex109b.data
+
+# start ex109c.data
+StateVariableInequalityConstraints = [-1*(-30*pi/180.0 - alpha)*(alpha - 30.0*pi/180.0)];
+InputFile               = "ex109b.data";
+CostFunctional          = Tf*(1.0e3 + 2*u1*u1 + u2*u2);
+OutputFile              = "ex109c.data";
+# end ex109c.data

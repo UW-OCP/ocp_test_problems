@@ -1,0 +1,20 @@
+# A. Miele, Gradient algorithms for the optimization of dynamic systems,
+# Control and Dynamic Systems, Academic Press, pp. 1--52, 1980.
+
+StateVariables          = [y1, y2];
+ControlVariables        = [u];
+
+InitialConstraints      = [y1, y2 - 1];           
+TerminalConstraints     = [y1 - 1, y2 - 2];       
+CostFunctional          = 1 + y1*y1 + y2*y2 + u*u;
+DifferentialEquations   = [u - y2, u - 2*y1];
+InequalityConstraints   = [u - 6];
+
+StateEstimate           = [t, 1 + t];
+ControlEstimate         = [1 + 5*t];
+
+Nodes                   = 101;
+Tolerance               = 1.0e-6;
+OutputFile              = "exmiele8.data";
+Display                 = NO;
+MaximumMeshRefinements  = 20;

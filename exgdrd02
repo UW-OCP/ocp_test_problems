@@ -1,0 +1,35 @@
+# This is test problem gdrd02 (example 28.1) from John T. Betts, A collection of optimal control test problems, November 17, 2015
+
+Constants = [Tm = 193.044, g = 32.174, s = 5.49153484923381010e-5, c = 1580.9425279876559, h0 = 23800];
+
+StateVariables = [h, v, m];
+
+ControlVariables = [T];
+
+ParameterVariables = [tf];
+
+InitialConstraints = [h, v, m-3];
+
+TerminalConstraints = [m-1];
+
+DifferentialEquations = [
+	tf*v,
+	tf*((T - s*v*v*exp(-h/h0))/m - g),
+	-tf*T/c
+];
+
+InequalityConstraints = [-T, T - Tm];
+
+StateVariableInequalityConstraints = [0.1 - m];
+
+TerminalPenalty = -v;
+
+StateEstimate = [10e3*t, 1e3*t, 3-2*t];
+ControlEstimate = [Tm*t];
+ParameterEstimate = [20];
+FinalTime = 1;
+
+Nodes = 101;
+Tolerance = 1.0e-6;
+OutputFile = "exgdrd02.data";
+Display = YES;

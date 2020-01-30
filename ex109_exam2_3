@@ -1,0 +1,29 @@
+# Graichen and Petit
+
+Constants               = [pi = 3.14159265358979, m = 2.2, r = 0.2, J = 0.05, mg = 4, pi4 = 3.14159265358979*0.25];
+StateVariables 			= [x1, x1_dot, x2, x2_dot, alpha, alpha_dot];
+ControlVariables 		= [u1, u2];
+ParameterVariables      = [Tf, q, r];
+InitialConstraints 		= [x1, x1_dot, x2, x2_dot, alpha_dot, q*q - (alpha-pi4)*(-pi4-alpha)];
+TerminalConstraints 	= [x1-1, x1_dot, x2, x2_dot, alpha_dot, r*r - (alpha-pi4)*(-pi4-alpha)];
+CostFunctional 			= Tf*(1 + 0.5*u1*u1 + 0.5*u2*u2);
+
+DifferentialEquations 	= [Tf*x1_dot,
+                            Tf*(u1*cos(alpha) - u2*sin(alpha))/m,
+                            Tf*x2_dot,
+                            Tf*(-mg + u1*sin(alpha) + u2*cos(alpha))/m,
+                            Tf*alpha_dot,
+                            Tf*(r*u1)/J];
+
+StateEstimate           = [t, t*(1-t), t*(t-1), t*(1-t), 0.01*t*(1-t), t*(1-t)];
+ControlEstimate         = [0.1, 0.1];
+ParameterEstimate       = [2.6, pi4, pi4];
+InitialTime             = 0;
+FinalTime               = 1;
+Nodes					= 101;
+Tolerance				= 1.0e-4;
+OutputFile				= "ex109_exam2_3.data";
+Display					= NO;
+MaximumNewtonIterations = 250;
+MaximumNodes            = 1000;
+MaximumMeshRefinements	= 5;

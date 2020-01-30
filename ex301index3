@@ -1,0 +1,46 @@
+# compound pendulum
+# index 3 DAE model
+Constants               = [m = 3.0, J = 0.25, r = 1.0,
+                            theta0 = 0, omega0 = 0, alpha0 = 0];
+Variables               = [I, phi1, phi2, phi1dot, phi2dot, phi1ddot, phi2ddot, beta, _epsilon_,
+                            sx0, sy0, vx0, vy0, ax0, ay0];
+beta = 1.0/_epsilon_;
+I = J + 0.25*m*r*r;
+
+sx0 = r*cos(theta0)*0.5;
+sy0 = r*sin(theta0)*0.5;
+vx0 = -r*omega0*sin(theta0)*0.5;
+vy0 = r*omega0*cos(theta0)*0.5;
+
+StateVariables 			= [sx, sy, theta, vx, vy, omega];
+ControlVariables 		= [ax, ay, alpha, lam1, lam2, tau];
+InitialConstraints 		= [sx - sx0, sy - sy0, theta - theta0, 
+                            vx - vx0, vy - vy0, omega - omega0];
+                            
+TerminalConstraints 	= [theta - 1.0, omega];
+#TerminalPenalty         = omega*omega + (theta-1.0)*(theta-1.0);
+CostFunctional 			= tau*tau*0.5 + (ax*ax + ay*ay + alpha*alpha + lam1*lam1 + lam2*lam2)*_epsilon_*0.5;
+
+phi1 = sx - r*cos(theta)*0.5;
+phi2 = sy - r*sin(theta)*0.5;
+phi1dot = vx + r*omega*sin(theta)*0.5;
+phi2dot = vy - r*omega*cos(theta)*0.5;
+phi1ddot = ax + r*alpha*sin(theta)*0.5 + r*omega*omega*cos(theta)*0.5;
+phi2ddot = ay - r*alpha*cos(theta)*0.5 + r*omega*omega*sin(theta)*0.5;
+
+DifferentialEquations 	= [vx, vy, omega, ax, ay, alpha];
+
+EqualityConstraints     = [m*ax + lam1,
+                           m*ay + lam2,
+                           J*alpha + lam1*sin(theta)*r*0.5 - lam2*cos(theta)*r*0.5 - tau,
+                           phi1ddot + 2.0*beta*phi1dot + beta*beta*phi1,
+                           phi2ddot + 2.0*beta*phi2dot + beta*beta*phi2];
+
+StateEstimate           = [sx0, sy0, theta0, vx0, vy0, omega0];
+ControlEstimate         = [0, 0, 0, 0, 0, 0.1];
+
+Nodes					= 201;
+Tolerance				= 1.0e-6;
+#InputFile				= "ex301index3b100.data";
+OutputFile				= "ex301index3.data";
+Display					= YES;

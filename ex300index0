@@ -1,0 +1,13 @@
+# mass-spring-damper system
+# ODE model
+Constants               = [m = 3.0, k = 10.0, b = 0.1];
+StateVariables 			= [s, v];
+ControlVariables 		= [e];
+InitialConstraints 		= [s - 1.0, v];
+TerminalConstraints 	= [s, v];
+CostFunctional 			= e*e*0.5;
+DifferentialEquations 	= [v, (e - b*v - k*s)/m];
+Nodes					= 101;
+Tolerance				= 1.0e-6;
+OutputFile				= "ex300index0.data";
+Display					= YES;

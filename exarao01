@@ -1,0 +1,19 @@
+# Rao and Mease , Eigenvector approximate dichotomic basis method 
+# for solving hyper-sensitive optimal control ptoblems, 
+# Optimal Control Applications and Methods, 23, 2002, pp. 215-238
+
+# This is test problem arao01 (example 8.1) from John T. Betts, A collection of optimal control test problems, November 17, 2015
+
+
+Constants = [T = 1000]; # solve with T = 10000 and Nodes = 9001
+StateVariables = [y];
+ControlVariables = [u];
+InitialConstraints = [y - 1.0];
+TerminalConstraints = [y - 1.5];
+CostFunctional = T*(y*y + u*u);
+DifferentialEquations = [(-y*y*y + u)*T];
+FinalTime = 1;
+Nodes = 1001;
+Tolerance = 1.0e-6;
+OutputFile = "exarao01.data";
+

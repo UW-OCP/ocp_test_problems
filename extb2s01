@@ -1,0 +1,49 @@
+
+# This is test problem tb2s01 (example 67.1) from John T. Betts, A collection of optimal control test problems, November 17, 2015
+
+Constants = [beta1 = 13, beta2 = 13, mu = 0.0143, d1 = 0, d2 = 0, k1 = 0.5, k2 = 1, r1 = 2, r2 = 1,
+	p = 0.4, q = 0.1, N = 30000, betastar = 0.029, B1 = 50, B2 = 500, tf = 0.8];
+
+Variables = [Gamma];
+
+StateVariables = [S, T, L1, I1, L2, I2];
+
+ControlVariables = [u1, u2];
+
+InitialConstraints = [S - 76*N/120, T - N/120, L1 - 36*N/120, I1 - 4*N/120, L2 - 2*N/120, I2 - N/120];
+
+InequalityConstraints = [0.05 - u1, u1 - 0.95, 0.05 - u2, u2 - 0.95];
+
+StateVariableInequalityConstraints = [-S, -T, -L2, -I2, -L1, -I1];
+
+Gamma = mu*N;
+
+DifferentialEquations = [
+	tf*(Gamma - beta1*S*I1/N - betastar*S*I2/N - mu*S),
+	tf*(u1*r1*L1 - mu*T + (1 - (1-u2)*(p+q))*r2*I1 - beta2*T*I1/N - betastar*T*I2/N),
+	tf*(beta1*S*I1/N - (mu+k1)*L1 - u1*r1*L1 + (1-u2)*p*r2*I1 + beta2*T*I1/N - betastar*L1*I2/N),
+	tf*((1-u2)*q*r2*I1 - (mu+k2)*L2 + betastar*(S + L1 + T)*I2/N),
+	tf*(k1*L1 - (mu+d1)*I1 - r2*I1),
+	tf*(k2*L2 - (mu+d2)*I2)
+];
+
+CostFunctional = tf*(L2 + I2 + B1*u1*u1/2 + B2*u2*u2/2);
+
+FinalTime = 1;
+
+Nodes = 101;
+Tolerance = 1.0e-6;
+
+#StateEstimate = [76*N/120, N/120, 36*N/120, 4*N/120, 2*N/120, N/120];
+#ControlEstimate = [0.95 - 0.9*t/tf, 0.95 - 0.9*t/tf];
+#OutputFile = "extb2s01a.data"; # tf = 0.5
+#InputFile  = "extb2s01a.data";
+#OutputFile = "extb2s01b.data"; # tf = 0.6
+#InputFile  = "extb2s01b.data";
+#OutputFile = "extb2s01c.data"; # tf = 0.7
+InputFile  = "extb2s01c.data";
+OutputFile = "extb2s01d.data"; # tf = 0.8
+#InputFile  = "extb2s01d.data";
+#OutputFile = "extb2s01e.data"; # tf = 1
+Display = YES;
+

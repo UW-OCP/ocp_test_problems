@@ -1,0 +1,27 @@
+# BOCOP - A collection of examples / http://bocop.org
+# Octber 2, 2017
+# Example 2.6 Fuller problem, p. 8
+#
+# H.M. Robbins. Junction phenomena for optimal control with 
+# state-variable inequality constraints of third order. 
+# J. of Optimization Theory and Applications, 31:85–99, 1980.
+#
+
+Constants               = [alpha = 3];
+StateVariables          = [x1, x2, x3];
+ControlVariables        = [u];
+InitialTime             = 0.0;
+FinalTime               = 10.0;
+InitialConstraints      = [x1 - 1.0, x2 + 2.0, x3];
+DifferentialEquations   = [x2, x3, u];
+CostFunctional          = 0.5*u*u + alpha*x1;
+StateVariableInequalityConstraints = [-x1];
+
+StateEstimate          = [1 - 0.1*t, -2.0 + 0.1*t, t];
+ControlEstimate        = [10.0-t];
+
+Nodes                  = 101;
+MaximumNodes           = 1000;
+Tolerance              = 1.0e-6;
+OutputFile             = "ex226.data";
+Display                = NO;

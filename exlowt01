@@ -1,0 +1,32 @@
+# This is test problem lowt01 (example 42.1) from John T. Betts, A collection of optimal control test problems, November 17, 2015
+
+Constants = [pi = 3.141592654];
+
+StateVariables = [r, theta, vr, vtheta];
+
+ControlVariables = [beta];
+
+InitialConstraints = [r - 1.1, theta, vr, vtheta - 1/sqrt(1.1)];
+
+DifferentialEquations = [
+	vr,
+	vtheta/r,
+	vtheta*vtheta/r - 1/(r*r) + 0.01*sin(beta),
+	-vtheta*vr/r + 0.01*cos(beta)
+];
+
+InequalityConstraints = [-pi/2 - beta, beta - pi/2];
+
+# StateVariableInequalityConstraints = [0.5 - r, r - 5, -theta, theta - 8*pi, -10 - vr, vr - 10, -vtheta, vtheta - 10];
+
+# CostFunctional = 1/r - 0.5*(vr*vr + vtheta*vtheta);
+CostFunctional = 1/r - 0.5*(vr*vr + vtheta*vtheta) + beta*beta;
+
+StateEstimate = [1.1, 0, 0, 1/sqrt(1.1)];
+ControlEstimate = [0.01];
+
+FinalTime = 50;
+Nodes = 501;
+Tolerance = 1.0e-6;
+OutputFile = "exlowt01.data";
+Display = YES;

@@ -1,0 +1,25 @@
+Constants               = [p=10, r1=0.125, r2=0.125];
+StateVariables          = [x1, x2, x3, x4];
+ControlVariables        = [u1, u2];
+InitialConstraints      = [x1, x2-0.5, x3, x4];           
+DifferentialEquations   = [p*x3, p*x4, p*u1, p*u2];
+InequalityConstraints   = [u1-1, -1-u1, u2-1, -1-u2];
+StateVariableInequalityConstraints = [r2*r2 - (x1-1)*(x1-1) - (x2-0.375)*(x2-0.375),
+                                      r2*r2 - (x1-1)*(x1-1) - (x2-0.875)*(x2-0.875), 
+                                      r2*r2 - (x1-1.5)*(x1-1.5) - (x2-0.125)*(x2-0.125),
+                                      r2*r2 - (x1-1.5)*(x1-1.5) - (x2-0.625)*(x2-0.625),
+                                      r1*r1 - (x1-0.5)*(x1-0.5) - (x2-0.5)*(x2-0.5),
+                                      -x2, x2-1];
+                                      #-x2, x2-1, -x1];
+TerminalConstraints     = [x1-2, x2-0.5, x3, x4]; 
+CostFunctional          = p*(1 + u1*u1 + u2*u2);
+InitialTime             = 0.0;
+FinalTime               = 1.0;
+Nodes                   = 101;
+Tolerance               = 1.0e-6;
+Display                 = NO;
+MaximumNodes            = 2000;
+MaximumMeshRefinements  = 25;
+
+InputFile              = "ex222pen0.data";
+OutputFile              = "ex222.data";

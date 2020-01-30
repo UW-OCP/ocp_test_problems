@@ -1,0 +1,34 @@
+#@article{LWR67,
+#  author        = "L. S. Lasdon and A. D. Warren and R. K. Rice",
+#  title         = "An interior penalty method for inequality constrained optimal control problems",
+#  journal       = "IEEE Transactions on Automatic Controls",
+#  volume        = "12",
+#  year          = "1967",
+#  pages         = "388-395"
+#};
+
+Constants                = [g = -32.2, pi = 3.14159265358979];
+StateVariables           = [x1, x2, x3];
+ControlVariables         = [u];
+ParameterVariables       = [p];
+
+InitialConstraints       = [x1, x2 - 6.0, x3 - 1.0];
+
+TerminalConstraints      = [x1 - 6.0];
+
+DifferentialEquations    = [(p+1)*x3*cos(u), (p+1)*x3*sin(u), (p+1)*g*sin(u)];
+
+StateVariableInequalityConstraints = [-(x2+0.5*x1-5.0)];
+
+InequalityConstraints	= [u - 0.5*pi, -0.5*pi - u];
+
+CostFunctional           = (p+1)*(x1*x1 + x2*x2 + x3*x3 + u*u);
+
+ParameterEstimate        = [0];
+
+InputFile                = "ex14.data";
+
+OutputFile               = "ex15a.data";
+
+Tolerance                = 1.0e-6;
+

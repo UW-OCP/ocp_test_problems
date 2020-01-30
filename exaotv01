@@ -1,0 +1,55 @@
+
+# This is test problem aotv01 (example 6.1) from John T. Betts, A collection of optimal control test problems, November 17, 2015
+
+Constants = [tf = 1000, Re = 2.092643e7, m = 3.315e2, rho0 = 3.3195e-5, h0 = 1.0e5, hr = 2.41388e4, CD0 = 0.032, k = 1.4, S = 1.2584e2, mu = 1.40895e16, pi = 3.141592654];
+
+Variables = [rhos, a0, a1, rho, M, qdot, vs, r];
+
+StateVariables = [phi, h, v, gamma, psi];
+
+ControlVariables = [CL, beta];
+
+#ParameterVariables = [tf];
+
+InitialConstraints = [phi, h - 365000, v - 25745.704, gamma + 0.55*pi/180, psi];
+
+rhos = rho0*exp(h0/hr);
+a0 = S*sqrt(CD0/k)/(2*m);
+a1 = CD0*S/(2*m);
+rho = rho0*exp(-(h-h0)/hr);
+r = Re + h;
+M = (1 - mu/(r*v*v))/(a0*rho*r);
+vs = sqrt(mu/Re);
+# qdot = 17600*sqrt(rho/rhos)*pow((v/vs), 3.15);
+qdot = 17600*sqrt(rho/rhos)*(v/vs)*(v/vs)*(v/vs);
+
+DifferentialEquations = [
+    tf*v*cos(gamma)*sin(psi)/r,
+    tf*v*sin(gamma),
+    tf*(-a1*rho*v*v*(1+CL*CL) - mu*sin(gamma)/(r*r)),
+    tf*(a0*rho*v*(CL*cos(beta) + M*cos(gamma))),
+    tf*(a0*rho*v*CL*sin(beta)/cos(gamma) - v*cos(gamma)*cos(psi)*tan(phi)/r)
+];
+
+# InequalityConstraints = [-CL, CL - 2, -beta, beta - pi];
+
+# StateVariableInequalityConstraints = [-qdot, qdot - 800, -h, h - 400000, 20000 - v, v - 28000, -pi/18 - gamma, gamma - pi/18, -89*pi/180 - psi, psi - 89*pi/180, -89*pi/180 - phi, phi - 89*pi/180];
+
+# TerminalConstraints = [h - 365000, v - 25745.704, cos(phi)*cos(psi) - cos(18*pi/180)];
+TerminalPenalty = ((h - 365000)*(h - 365000) + (v - 22000)*(v - 22000));
+
+# TerminalPenalty = -v;
+
+CostFunctional = (CL*CL + beta*beta + phi*phi + h*h + v*v + gamma*gamma + psi*psi);
+
+InitialTime = 0.0;
+FinalTime = 1.0;
+
+StateEstimate = [0, 365000, 25745.704, -0.55*pi/180, 0];  
+ControlEstimate = [1, 20*pi/180];
+# ParameterEstimate = [1100];
+
+Nodes = 501;
+Tolerance = 1.0e-6;
+OutputFile = "exaotv01.data";
+Display = YES;

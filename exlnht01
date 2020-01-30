@@ -1,0 +1,30 @@
+# This is test problem lnht01 (example 40.1) from John T. Betts, A collection of optimal control test problems, November 17, 2015
+
+Constants = [c1 = 2.0e-2, c2 = 2.4e-1, c3 = 2.4, c4 = 2.4e-5, c5 = 3.0e-3, c6 = 3.0e-2, c7 = 1500, c8 = 10, c9 = 1200];
+
+StateVariables = [y1, y2, y3, y4, y5];
+
+ControlVariables = [u];
+
+InitialConstraints = [y1 - 982, y2 - 0.05, y3 - 6.2e-4, y4 - 0.02, y5];
+
+DifferentialEquations = [
+	c8/(1 + y4) - c1*y1 + c6*y1*(1 - (1/c7)*(y1 + y2 + y3)) - c4*y4*y1,
+	c4*y4*y1 - c1*y2 - c5*y2,
+	c5*y2 - c2*y3,
+	c9*c2*y3*u - c4*y4*y1 - c3*y4,
+	1.0e-5*(-y1 + 50*(1-u)*(1-u))
+];
+
+InequalityConstraints = [-u, u - 1];
+
+TerminalPenalty = y5;
+
+StateEstimate = [982, 0.05, 6.2e-4, 0.02, 0];
+ControlEstimate = [0.001];
+
+FinalTime = 500;
+Nodes = 501;
+Tolerance = 1.0e-6;
+OutputFile = "exlnht01.data";
+Display = YES;

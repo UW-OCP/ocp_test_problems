@@ -1,0 +1,29 @@
+# Jacobson, D, Gershwin, S. and Lele, M.,
+# Computation of Optimal Singular Controls
+# Jacobson, D. H.\ and Lele, M. M.,
+# {\em  IEEE Trans. AC},  Vol. 15, pp. 67--73, 1970.
+#
+# BOCOP - A collection of examples / http://bocop.org
+# Octber 2, 2017
+# Example 2.5 Fuller problem, p. 7
+
+StateVariables          = [x1, x2];
+ControlVariables        = [u];
+InitialConstraints      = [x1, x2 - 1];           
+CostFunctional          = x1*x1 + x2*x2;
+DifferentialEquations   = [x2, u];
+InequalityConstraints   = [u - 1, -1 - u];
+StateVariableInequalityConstraints   = [-0.25 - x2];
+InitialTime             = 0.0;
+FinalTime               = 5.0;
+
+StateEstimate           = [t*(1-t), 1 - t];
+ControlEstimate         = [0.01*t*(5-t)];
+
+Nodes                   = 101;
+Tolerance               = 1.0e-6;
+OutputFile              = "ex32svic.data";
+#Display                = YES;
+Display                 = NO;
+MaximumNodes            = 2000;
+MaximumMeshRefinements  = 25;

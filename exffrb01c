@@ -1,0 +1,52 @@
+# This is test problem ffrb01 (example 25.1) from John T. Betts, A collection of optimal control test problems, November 17, 2015
+
+Constants = [tf = 12, alpha = 0.2, beta = 0.2, pi = 3.141592654, eps = 1.0e-8, fac = 1.0e3];
+
+Variables = [b1, b2, b3, b4, b5, b6, b7, b8, b9, b10];
+
+StateVariables = [y1, y2, y3, y4, y5, y6];
+
+ControlVariables = [u1, u2, u3, u4];
+
+InitialConstraints = [y1 + 10, y2 + 10, y3 - pi/2, y4, y5, y6];
+
+TerminalPenalty = fac*(y1*y1 + y2*y2 + y3*y3 + y4*y4 + y5*y5 + y6*y6);
+# TerminalConstraints = [y1, y2, y3, y4, y5, y6];
+
+DifferentialEquations = [
+	tf*y4, 
+	tf*y5,
+	tf*y6, 
+	tf*(u1 - u2 + u3 - u4)*cos(y3), 
+	tf*(u1 - u2 + u3 - u4)*sin(y3), 
+	tf*(alpha*(u1 - u2) - beta*(u3 - u4))
+];
+
+# InequalityConstraints = [u1 + u2 - 1, u3 + u4 - 1, -u1, -u2, -u3, -u4];
+# InequalityConstraints = [u1 + u2 - 1, u3 + u4 - 1, -u1, -u2, -u3, -u4, u1 - 1, u2 - 1, u3 - 1, u4 - 1];
+
+# abs(u) ~= sqrt(u*u + epsilon)
+# max(a, 0) ~= (a + sqrt(a*a + epsilon))/2
+
+b1 = (u1 + u2 - 1 + sqrt((u1 + u2 - 1)*(u1 + u2 - 1) + 4*eps))/2;
+b2 = (u3 + u4 - 1 + sqrt((u3 + u4 - 1)*(u3 + u4 - 1) + 4*eps))/2;
+b3 = (-u1 + sqrt(u1*u1 + 4*eps))/2;
+b4 = (-u2 + sqrt(u2*u2 + 4*eps))/2;
+b5 = (-u3 + sqrt(u3*u3 + 4*eps))/2;
+b6 = (-u4 + sqrt(u4*u4 + 4*eps))/2;
+b7 = (u1-1 + sqrt((u1-1)*(u1-1) + 4*eps))/2;
+b8 = (u2-1 + sqrt((u2-1)*(u2-1) + 4*eps))/2;
+b9 = (u3-1 + sqrt((u3-1)*(u3-1) + 4*eps))/2;
+b10= (u4-1 + sqrt((u4-1)*(u4-1) + 4*eps))/2;
+
+CostFunctional = tf*(u1*u1 + u2*u2 + u3*u3 + u4*u4) + 
+	fac*(b1*b1 + b2*b2 + b3*b3 + b4*b4 + b5*b5 + b6*b6 + b7*b7 + b8*b8 + b9*b9 + b10*b10);
+
+FinalTime = 1;
+
+StateEstimate = [-10 + 10*t/tf, -10 + 10*t/tf, pi/2 - pi*t/(2*tf),	0.01*t*(-t+tf)/tf,	0.01*t*(-t+tf)/tf,	0.01*t*(-t+tf)/tf];
+ControlEstimate = [0.1, 0.1, 0.1, 0.1];
+Nodes = 501;
+Tolerance = 1.0e-6;
+OutputFile = "exffrb01c.data";
+Display = YES;

@@ -1,0 +1,31 @@
+# This is test problem jshi01 (example 36.1) from John T. Betts, A collection of optimal control test problems, November 17, 2015
+
+Constants = [s1 = 2, s2 = 1.5, mu = 0.002, k = 2.5e-4, 
+	c = 0.007, g = 30, b1 = 14, b2 = 1, A1 = 2.5e5, A2 = 75,
+	tf = 50];
+
+StateVariables = [T, V];
+
+ControlVariables = [u1, u2];
+
+InitialConstraints = [T-400, V-3];
+
+DifferentialEquations = [
+	tf*(s1 - (s2*V)/(b1+V) - mu*T - k*V*T + u1*T),
+	tf*(g*(1 - u2)*V/(b2+V) - c*V*T)
+];
+
+StateVariableInequalityConstraints = [-T, T - 1200, 0.05 - V, V - 5];
+
+InequalityConstraints = [-u1, u1 - 0.02, -u2, u2 - 0.9];
+
+CostFunctional = tf*(T - (A1*u1*u1 + A2*u2*u2));
+
+StateEstimate = [400, 3];
+ControlEstimate = [0.01, 0.5];
+
+FinalTime = 1;
+Nodes = 501;
+Tolerance = 1.0e-6;
+OutputFile = "exjshi01.data";
+Display = YES;

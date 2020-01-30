@@ -1,0 +1,24 @@
+
+# BOCOP - A collection of examples / http://bocop.org
+# Octber 2, 2017
+# Example 2.2, p. 5
+
+Constants               = [gamma = 1, delta = 0.01, T = 2];
+StateVariables          = [x];
+ControlVariables        = [u];
+InitialConstraints      = [x - 1];           
+CostFunctional          = x*x + gamma*u + delta*u*u;
+DifferentialEquations   = [u];
+InitialTime             = 0.0;
+FinalTime               = T;
+
+StateEstimate           = [1 - t/T];
+ControlEstimate         = [-1];
+
+Nodes                   = 101;
+Tolerance               = 1.0e-6;
+OutputFile              = "ex224.data";
+
+Display                 = NO;
+MaximumNodes            = 2000;
+MaximumMeshRefinements  = 25;

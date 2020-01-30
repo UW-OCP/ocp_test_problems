@@ -1,0 +1,41 @@
+# This is test problem rbrm01 (example 59.1) from John T. Betts, A collection of optimal control test problems, November 17, 2015
+
+Constants = [L = 5, pi = 3.141592654];
+
+Variables = [Itheta, Iphi];
+
+StateVariables = [y1, y2, y3, y4, y5, y6];
+
+ControlVariables = [u1, u2, u3];
+
+ParameterVariables = [tf];
+
+InitialConstraints = [y1 - 9/2, y2, y3, y4, y5 - pi/4, y6];
+
+TerminalConstraints = [y1 - 9/2, y2, y3 - 2*pi/3, y4, y5 - pi/4, y6];
+
+Iphi = ((L-y1)*(L-y1)*(L-y1) + y1*y1*y1)/3;
+Itheta = Iphi*sin(y5)*sin(y5);
+
+DifferentialEquations = [
+	tf*y2,
+	tf*u1/L,
+	tf*y4,
+	tf*u2/Itheta,
+	tf*y6,
+	tf*u3/Iphi
+];
+
+InequalityConstraints = [-1 - u1, u1 - 1, -1 - u2, u2 - 1, -1 - u3, u3 - 1];
+
+CostFunctional = tf*(100 + u1*u1 + u2*u2 + u3*u3);
+
+StateEstimate = [(9/2)*t*(1-t), t*(1-t), 2*pi*t/3, t*(1-t), pi/4, t*(1-t)];
+ControlEstimate = [-0.01 + 0.2*t, -0.01 + 0.2*t, -0.01 + 0.2*t];
+ParameterEstimate = [10];
+
+FinalTime = 1;
+Nodes = 301;
+Tolerance = 1.0e-6;
+OutputFile = "exrbrm01.data";
+Display = YES;

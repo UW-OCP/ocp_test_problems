@@ -1,0 +1,28 @@
+# A modified version of the problem from
+# D. F. Lawden, Analytical Methods of Optimization
+# Problem 35: singular optimal control, pp. 144-146
+
+StateVariables          = [x, y];
+ControlVariables        = [u];
+ParameterVariables      = [p];
+InitialConstraints      = [x - 1, y - 2];           
+TerminalConstraints     = [x, y];           
+CostFunctional          = p*(x*x);
+DifferentialEquations   = [p*(y + u), p*(-x + u)];
+InequalityConstraints   = [u - 1, -10 - u];
+InitialTime             = 0.0;
+FinalTime               = 1.0;
+
+StateEstimate           = [1 - t, 2 - t];
+ControlEstimate         = [-10+t];
+ParameterEstimate       = [5];
+#ParameterEstimate       = [3];
+#InputFile              = "ex223.data_docp";
+
+Nodes                   = 101;
+Tolerance               = 1.0e-6;
+OutputFile              = "ex223.data";
+#Display                = YES;
+Display                 = NO;
+MaximumNodes            = 2000;
+MaximumMeshRefinements  = 25;

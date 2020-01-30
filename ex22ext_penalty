@@ -1,0 +1,65 @@
+# This problem replaces the inequality constraints with an exterior 
+# penalty function.  In particular, let e > 0 be a small number, and  
+# 
+# P(a) = (a + sqrt(a*a + e*e)) / 2.
+#
+# Hence P(a) is an approximation of max(0, a).
+#
+#
+#
+
+Variables               = [c5, s5,
+                           Pu1a, Pu1b,
+                           Pu2a, Pu2b,
+                           Pu3a, Pu3b,
+                           Pu4a, Pu4b, a];
+Constants               = [m = 10.0, d = 5.0, l = 5.0, I = 12.0, 
+                           pi = 3.14159265358979, rho = 1.0e3, e = 1.0e-6];
+InitialTime             = 0.0;
+FinalTime               = 1.0;
+StateVariables          = [x1, x2, x3, x4, x5, x6];
+ControlVariables        = [u1, u2, u3, u4];
+ParameterVariables      = [w];
+InitialConstraints      = [x1, x2, x3, x4, x5, x6];
+TerminalConstraints     = [x1 - 4.0, x2, x3 - 4.0, x4, x5 - pi/4.0, x6];
+c5 = cos(x5);
+s5 = sin(x5);
+DifferentialEquations   = [w*x2,
+        w*((u1+u3)*c5 - (u2+u4)*s5)/m,
+        w*x4,
+        w*((u1+u3)*s5 + (u2+u4)*c5)/m,
+        w*x6,
+        w*((u1+u3)*d - (u2+u4)*l)/I];
+        
+a = u1 - 5.0;
+Pu1a =  (a + sqrt(a*a + e*e)) / 2;
+a = -5.0 - u1;
+Pu1b =  (a + sqrt(a*a + e*e)) / 2;
+
+a = u2 - 5.0;
+Pu2a =  (a + sqrt(a*a + e*e)) / 2;
+a = -5.0 - u2;
+Pu2b =  (a + sqrt(a*a + e*e)) / 2;
+
+a = u3 - 5.0;
+Pu3a =  (a + sqrt(a*a + e*e)) / 2;
+a = -5.0 - u3;
+Pu3b =  (a + sqrt(a*a + e*e)) / 2;
+
+a = u4 - 5.0;
+Pu4a =  (a + sqrt(a*a + e*e)) / 2;
+a = -5.0 - u4;
+Pu4b =  (a + sqrt(a*a + e*e)) / 2;
+
+CostFunctional          = w*(rho + u1*u1 + u2*u2 + u3*u3 + u4*u4) + (Pu1a*Pu1a + Pu1b*Pu1b + Pu2a*Pu2a + Pu2b*Pu2b + Pu3a*Pu3a + Pu3b*Pu3b + Pu4a*Pu4a + Pu4b*Pu4b) * rho;
+#InequalityConstraints   = [ -(u1 - 5.0)*(-5.0 - u1),
+#                            -(u2 - 5.0)*(-5.0 - u2),
+#                            -(u3 - 5.0)*(-5.0 - u3),
+#                            -(u4 - 5.0)*(-5.0 - u4)];
+ParameterEstimate       = [10.0];
+Tolerance               = 1.0e-6;
+Nodes                   = 101;
+MaximumMeshRefinements  = 20;
+MaximumNodes            = 5000;
+InputFile               = "ex21.data";
+OutputFile              = "ex22ext_penalty.data";

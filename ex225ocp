@@ -1,0 +1,24 @@
+
+# BOCOP - A collection of examples / http://bocop.org
+# Octber 2, 2017
+# Example 2.3 Fuller problem, p. 6
+
+StateVariables          = [x1, x2];
+ControlVariables        = [u];
+InitialConstraints      = [x1, x2 - 1];           
+CostFunctional          = x1*x1;
+DifferentialEquations   = [x2, u];
+InequalityConstraints   = [u - 1, -1 - u];
+InitialTime             = 0.0;
+FinalTime               = 3.5;
+
+StateEstimate           = [t, 1-t];
+ControlEstimate         = [-1 + 2*t];
+
+Nodes                   = 101;
+Tolerance               = 1.0e-6;
+OutputFile              = "ex225.data";
+
+Display                 = NO;
+MaximumNodes            = 2000;
+MaximumMeshRefinements  = 25;

@@ -1,0 +1,35 @@
+# Agrawal, S. K. and Fabien, B. C., Optimization of Dynamic Systems,
+# Kluwer Academic Publishers, 1999. pp. 106
+
+Variables               = [nu1, nu2, f1, f2];
+StateVariables 			= [x1, x2, x3];
+ControlVariables 		= [u];
+ParameterVariables      = [p];
+
+InitialConstraints 		= [x1, x2, x3];		   
+TerminalConstraints 	= [x1 - 0.25, x2, x3];
+
+Constants				= [rho = 1.0e-3];
+CostFunctional 		= p*(1 + 0.5*rho*u*u);
+
+#CostFunctional 		    = p;
+
+nu1 = (u -1);
+nu2 = (-1 - u);
+f1 = nu1 + sqrt(nu1*nu1+1.0e-6);
+f2 = nu2 + sqrt(nu2*nu2+1.0e-6);
+
+DifferentialEquations 	= [p*x2, p*u, f1*f1 + f2*f2];
+
+#InequalityConstraints	= [u - 1.0, -1.0 - u];
+
+StateEstimate			= [0.25*t, sin(0.5*t*3.14159), 0];
+ControlEstimate			= [1 - 2*t];
+ParameterEstimate		= [2];
+
+Nodes					= 101;
+Tolerance				= 1.0e-6;
+OutputFile				= "ex3.data";
+Display					= NO;
+MaximumMeshRefinements	= 5;
+MaximumNodes            = 500;

@@ -1,0 +1,18 @@
+# cart-simple pendulum
+# index 1 DAE model
+Constants               = [m1 = 1.0, m2 = 0.3, r = 0.5, g = 9.81, pi = 3.141592654];
+StateVariables 			= [x, theta, vx, omega];
+ControlVariables 		= [ax, alpha, F];
+InitialConstraints 		= [x, theta + 0.5*pi, vx, omega];
+TerminalConstraints 	= [x-2.0, theta, vx, omega];
+CostFunctional 			= F*F;
+DifferentialEquations 	= [vx, omega, ax, alpha];
+EqualityConstraints     = [(m1+m2)*ax - m2*r*alpha*sin(theta) - m2*r*omega*omega*cos(theta) - F,
+                            m2*r*alpha - m2*r*ax*sin(theta) + m2*g*r*cos(theta)];
+FinalTime               = 2.0;
+StateEstimate           = [t, (t-2.0)*0.25*pi, (2.0-t)*t, (t-2.0)*t];
+ControlEstimate         = [0.1];
+Nodes					= 101;
+Tolerance				= 1.0e-6;
+OutputFile				= "ex302index1.data";
+Display					= YES;

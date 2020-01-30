@@ -1,0 +1,26 @@
+# Bhattacharya, R.,
+# OPTRAGEN: A MATLAB Toolbox for Optimal Trajectory Generation,
+# {\it 45th IEEE Conference on Decision and Control},
+# pp. 6832 -- 6836, 2006.
+Constants               = [e = 1.0e-6, alpha = 1.0e-2];
+Variables               = [r1, r2];
+StateVariables          = [x, y, xdot, ydot];
+ControlVariables        = [ux, uy];
+InitialConstraints      = [x, y, xdot, ydot];
+TerminalConstraints     = [x - 1.2, y - 1.6];
+DifferentialEquations   = [xdot, ydot, ux, uy];
+
+r1 = 0.1 - (x - 0.4)*(x - 0.4) - (y - 0.5)*(y - 0.5);
+r2 = 0.1 - (x - 0.8)*(x - 0.8) - (y - 1.5)*(y - 1.5);
+
+CostFunctional          = ux*ux + uy*uy +
+                            ((r1+sqrt(r1*r1+e)) + (r2+sqrt(r2*r2+e)))/(2.0*alpha);
+
+#StateEstimate           = [1.2*t, 1.6*t, t*(t-1), t*(t-1)];
+#ControlEstimate         = [0.1-0.2*t, -0.1+t*(t-1)];
+InitialTime             = 0;
+FinalTime               = 1;
+Nodes                   = 201;
+Tolerance               = 1.0e-6;
+OutputFile              = "ex73b.data";
+MaximumNodes            = 2000;

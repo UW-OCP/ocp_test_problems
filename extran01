@@ -1,0 +1,36 @@
+# Vanderberi, Case studies in trajectory optimization: trains, planes and other pastimes,
+# Tech. Rep. ORFE-00-3, Operations Research and Financial Engineering, Princeton University, July 2000
+
+# This is test problem tran01 (example 70.1) from John T. Betts, A collection of optimal control test problems, November 17, 2015
+
+Constants = [a = 0.3, b = 0.14, c = 0.16, z1 = 2, z2 = 4, 
+		e = 0.05, s1 = 2, s2 = 0, s3 = -2, 
+		rho = 1.0e-3, pi = 3.141592654];
+
+Variables = [h];
+
+StateVariables = [x, v];
+
+ControlVariables = [ua, ub];
+
+InitialConstraints = [x, v];
+
+TerminalConstraints = [x - 6, v];
+
+h = ((s2-s1)/pi)*atan((x-z1)/e) + ((s3-s2)/pi)*atan((x-z2)/e);
+
+DifferentialEquations = [v, h - (a + b*v + c*v*v) + ua - ub];
+
+CostFunctional = ua*v + rho*(ua*ua + ub*ub);
+
+FinalTime = 4.8;
+
+InequalityConstraints = [-ua, ua - 10, -ub, ub - 2];
+
+StateEstimate = [5*t/4.8, (t/4.8)*(t/4.8 - 1)];
+ControlEstimate = [t/4.8, t/4.8];
+
+Nodes = 101;
+Tolerance = 1.0e-6;
+OutputFile = "extran01.data";
+

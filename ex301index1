@@ -1,0 +1,16 @@
+# compound pendulum
+# index 1 DAE model
+Constants               = [m = 3.0, J = 0.25, r = 1.0];
+Variables               = [I];
+I = J + 0.25*m*r*r;
+StateVariables 			= [theta, omega];
+ControlVariables 		= [alpha, tau];
+InitialConstraints 		= [theta, omega];
+TerminalConstraints 	= [theta - 1.0, omega];
+CostFunctional 			= tau*tau*0.5;
+DifferentialEquations 	= [omega, alpha];
+EqualityConstraints     = [I*alpha - tau];
+Nodes					= 101;
+Tolerance				= 1.0e-6;
+OutputFile				= "ex301index1.data";
+Display					= YES;

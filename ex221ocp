@@ -1,0 +1,25 @@
+# stiff van De Pol
+
+Constants               = [eps = 0.1];
+StateVariables          = [y1, y2];
+ControlVariables        = [u1];
+
+InitialTime             = 0;
+FinalTime               = 5;
+
+InitialConstraints      = [y1, y2-2];           
+CostFunctional          = y1*y1 + y2*y2 + u1*u1;
+
+DifferentialEquations   = [y2, (-y1 + y2*(1 - y1*y1) + u1)/eps];
+#InequalityConstraints   = [u1 -0.75, -0.75 - u1];
+
+StateEstimate           = [0, 2];
+ControlEstimate         = [1];
+
+Nodes                   = 101;
+Tolerance               = 1.0e-6;
+OutputFile              = "ex221.data";
+Display                 = NO;
+MaximumNewtonIterations = 500;
+MaximumNodes            = 2500;
+MaximumMeshRefinements  = 20;
